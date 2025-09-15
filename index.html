@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Per Hoc</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Tagesschrift&amp;display=swap" rel="stylesheet"/>
+<link rel="icon" type="image/x-icon" href="siteimages/faviconperhoc.png">
+<style type="text/tailwindcss">
+    :root {
+      --background-color: #000000;
+      --text-color: #FFFFFF;
+      --border-color: #333333;
+    }
+    body {
+      font-family: 'Tagesschrift', sans-serif;
+      background-color: var(--background-color);
+      color: var(--text-color);
+    }
+    .image-container {
+      position: relative;
+      overflow: hidden;
+    }
+    .image-container .image-bg {
+        transition: transform 0.5s ease;
+    }
+    .image-container:hover .image-bg {
+        transform: scale(1.05);
+    }
+    .image-container .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(75, 85, 99, 0.5);opacity: 0;
+      transition: opacity 0.5s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .image-container:hover .overlay {
+      opacity: 1;
+    }
+    .text {
+      color: white;
+      font-size: 1rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body class="antialiased">
+<div class="min-h-screen flex flex-col">
+<header class="w-full px-8 py-6">
+<div class="flex justify-between items-center">
+<a class="flex items-center space-x-3 text-2xl font-bold tracking-tighter" href="#">
+<img alt="Per Hoc Logo" class="h-8 w-8" src="siteimages/file.jpg"/>
+<span>Per Hoc</span>
+</a>
+<nav class="flex items-center space-x-6 text-sm font-medium">
+<a class="hover:text-gray-300 transition-colors" href="https://instagram.com/sencinas_">Instagram</a>
+<a class="hover:text-gray-300 transition-colors" href="https://www.linkedin.com/in/sencinas/">LinkedIn</a>
+<a class="hover:text-gray-300 transition-colors" href="mailto:sebastian@perhoc.com">Contacto</a>
+</nav>
+</div>
+</header>
+<main class="flex-grow flex items-center justify-center">
+<div class="grid grid-cols-1 md:grid-cols-3 w-full h-full">
+<div class="image-container h-[calc(100vh-88px)]">
+<div class="image-bg bg-cover bg-center w-full h-full" style='background-image: url("siteimages/plantaaltaplaceholder.jpeg");'></div>
+<div class="overlay">
+<div class="text">PLANTA ALTA<br>octubre 2022<br><br>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
+</div>
+</div>
+<div class="image-container h-[calc(100vh-88px)]">
+<div class="image-bg bg-cover bg-center w-full h-full" style='background-image: url("siteimages/vatesretroplaceholder.jpg");'></div>
+<div class="overlay">
+<div class="text">VATES RETRO<br>marzo 2023<br><br>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
+</div>
+</div>
+<div class="image-container h-[calc(100vh-88px)]">
+<div class="image-bg bg-cover bg-center w-full h-full" style='background-image: url("siteimages/containerplaceholder.png");'></div>
+<div class="overlay">
+<div class="text">CONTAINER DE DATA<br>mayo 2020<br><br>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+
+</body></html>
