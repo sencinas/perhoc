@@ -1,94 +1,306 @@
 <!DOCTYPE html>
-<html lang="en"><head>
+<html lang="en">
+<head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Per Hoc</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Tagesschrift&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Tagesschrift&display=swap" rel="stylesheet"/>
 <link rel="icon" type="image/x-icon" href="siteimages/faviconperhoc.png">
+
 <style type="text/tailwindcss">
-    :root {
-      --background-color: #000000;
-      --text-color: #FFFFFF;
-      --border-color: #333333;
-    }
-    body {
-      font-family: 'Tagesschrift', sans-serif;
-      background-color: var(--background-color);
-      color: var(--text-color);
-    }
-    .image-container {
-      position: relative;
-      overflow: hidden;
-    }
-    .image-container .image-bg {
-        transition: transform 0.5s ease;
-    }
-    .image-container:hover .image-bg {
-        transform: scale(1.05);
-    }
-    .image-container .overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: rgba(75, 85, 99, 0.5);opacity: 0;
-      transition: opacity 0.5s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-    }
-    .image-container:hover .overlay {
-      opacity: 1;
-    }
-    .text {
-      color: white;
-      font-size: 1rem;
-      text-align: center;
-    }
-  </style>
+  :root {
+    --background-color: #000000;
+    --text-color: #FFFFFF;
+    --border-color: #333333;
+  }
+
+  body {
+    font-family: 'Tagesschrift', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+  }
+
+  /* ===== Desktop/Grid image hover behavior ===== */
+  .image-container {
+    position: relative;
+    overflow: hidden;
+  }
+  .image-container .image-bg {
+    transition: transform 0.5s ease;
+  }
+  .image-container:hover .image-bg {
+    transform: scale(1.05);
+  }
+  .image-container .overlay {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    padding: 1rem;
+    opacity: 0;
+    transition: opacity 0.5s ease, background 0.5s ease;
+  }
+  .image-container:hover .overlay {
+    /* vignette effect with darker center, lighter edges */
+    background: radial-gradient(
+      circle,
+      rgba(0, 0, 0, 0.85) 0%,
+      rgba(0, 0, 0, 0.4) 65%,
+      rgba(0, 0, 0, 0.2) 100%
+    );
+    opacity: 1;
+  }
+  .text {
+    color: white;
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  /* ===== Mobile carousel styles ===== */
+  /* Only used on < md via Tailwind classes; these are the visual rules */
+  .carousel {
+    position: relative;
+    height: calc(100vh - 88px); /* match the desktop card height */
+    overflow: hidden;
+  }
+  .carousel-slide {
+    position: absolute; inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 800ms ease; /* soft fade */
+  }
+  .carousel-slide.active {
+    opacity: 1;
+  }
+  .carousel-overlay {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    padding: 1rem;
+    /* readable text overlay; light edge so the center is darker */
+    background: radial-gradient(
+      circle,
+      rgba(0,0,0,0.75) 0%,
+      rgba(0,0,0,0.35) 60%,
+      rgba(0,0,0,0.15) 100%
+    );
+  }
+  .carousel-dots {
+    position: absolute; left: 0; right: 0; bottom: 12px;
+    display: flex; gap: 8px; justify-content: center; align-items: center;
+  }
+  .carousel-dot {
+    width: 8px; height: 8px; border-radius: 9999px;
+    background: rgba(255,255,255,0.4);
+    transition: transform 200ms ease, background-color 200ms ease;
+  }
+  .carousel-dot.active {
+    background: rgba(255,255,255,0.95);
+    transform: scale(1.2);
+  }
+
+  /* Utility to hide scrollbars when menu opens on mobile (optional) */
+  .no-scroll { overflow: hidden; }
+</style>
 </head>
+
 <body class="antialiased">
 <div class="min-h-screen flex flex-col">
-<header class="w-full px-8 py-6">
-<div class="flex justify-between items-center">
-<a class="flex items-center space-x-3 text-2xl font-bold tracking-tighter" href="#">
-<img alt="Per Hoc Logo" class="h-8 w-8" src="siteimages/file.jpg"/>
-<span>Per Hoc</span>
-</a>
-<nav class="flex items-center space-x-6 text-sm font-medium">
-<a class="hover:text-gray-300 transition-colors" href="https://instagram.com/sencinas_">Instagram</a>
-<a class="hover:text-gray-300 transition-colors" href="https://www.linkedin.com/in/sencinas/">LinkedIn</a>
-<a class="hover:text-gray-300 transition-colors" href="mailto:sebastian@perhoc.com">Contacto</a>
-</nav>
-</div>
-</header>
-<main class="flex-grow flex items-center justify-center">
-<div class="grid grid-cols-1 md:grid-cols-3 w-full h-full">
-<div class="image-container h-[calc(100vh-88px)]">
-<div class="image-bg bg-cover bg-center w-full h-full" style='background-image: url("siteimages/plantaaltaplaceholder.jpeg");'></div>
-<div class="overlay">
-<div class="text">PLANTA ALTA<br>octubre 2022<br><br>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
-</div>
-</div>
-<div class="image-container h-[calc(100vh-88px)]">
-<div class="image-bg bg-cover bg-center w-full h-full" style='background-image: url("siteimages/vatesretroplaceholder.jpg");'></div>
-<div class="overlay">
-<div class="text">VATES RETRO<br>marzo 2023<br><br>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
-</div>
-</div>
-<div class="image-container h-[calc(100vh-88px)]">
-<div class="image-bg bg-cover bg-center w-full h-full" style='background-image: url("siteimages/containerplaceholder.png");'></div>
-<div class="overlay">
-<div class="text">CONTAINER DE DATA<br>mayo 2020<br><br>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</div>
-</div>
-</div>
-</div>
-</main>
+  <!-- Header -->
+  <header class="w-full px-8 py-6 border-b border-[var(--border-color)]">
+    <div class="flex justify-between items-center">
+      <a class="flex items-center gap-3 text-2xl font-bold tracking-tight" href="#">
+        <img alt="Per Hoc Logo" class="h-8 w-8" src="siteimages/file.jpg"/>
+        <span>Per Hoc</span>
+      </a>
+
+      <!-- Desktop nav -->
+      <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
+        <a class="hover:text-gray-300 transition-colors" href="https://instagram.com/sencinas_">Instagram</a>
+        <a class="hover:text-gray-300 transition-colors" href="https://www.linkedin.com/in/sencinas/">LinkedIn</a>
+        <a class="hover:text-gray-300 transition-colors" href="mailto:sebastian@perhoc.com">Contacto</a>
+      </nav>
+
+      <!-- Burger (mobile) -->
+      <button id="burgerBtn" class="md:hidden inline-flex items-center justify-center p-2 rounded border border-[var(--border-color)] hover:bg-gray-900 focus:outline-none" aria-label="Open menu" aria-expanded="false">
+        <!-- simple burger icon -->
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round">
+          <path d="M3 6h18M3 12h18M3 18h18"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile dropdown menu -->
+    <nav id="mobileMenu" class="md:hidden hidden mt-4 space-y-3 text-base">
+      <a class="block py-2 px-2 rounded hover:bg-gray-900" href="https://instagram.com/sencinas_">Instagram</a>
+      <a class="block py-2 px-2 rounded hover:bg-gray-900" href="https://www.linkedin.com/in/sencinas/">LinkedIn</a>
+      <a class="block py-2 px-2 rounded hover:bg-gray-900" href="mailto:sebastian@perhoc.com">Contacto</a>
+    </nav>
+  </header>
+
+  <main class="flex-grow">
+    <!-- ===== Mobile: Fade Carousel (visible on < md) ===== -->
+    <section class="block md:hidden">
+      <div class="carousel" id="carousel">
+        <!-- Slide 1 -->
+        <div class="carousel-slide active" data-index="0" style='background-image: url("siteimages/plantaaltaplaceholder.jpeg");'>
+          <div class="carousel-overlay">
+            <div class="text">
+              PLANTA ALTA<br/>octubre 2022<br/><br/>
+              Proyecto de rehabitación de la Galeria Larreta con propuestas artísticas, gastronómicas y emprendimientos varios. Precursor del proyecto AFFAIR.
+            </div>
+          </div>
+        </div>
+        <!-- Slide 2 -->
+        <div class="carousel-slide" data-index="1" style='background-image: url("siteimages/vatesretroplaceholder.jpg");'>
+          <div class="carousel-overlay">
+            <div class="text">
+              VATES RETRO<br/>marzo 2023<br/><br/>
+              Evento de poesía oral entrelazada con danza, animación y música en tiempo real.
+            </div>
+          </div>
+        </div>
+        <!-- Slide 3 -->
+        <div class="carousel-slide" data-index="2" style='background-image: url("siteimages/containerplaceholder.png");'>
+          <div class="carousel-overlay">
+            <div class="text">
+              CONTAINER DE DATA<br/>mayo 2020<br/><br/>
+              Fanzine digital multimedial de participación libre.
+            </div>
+          </div>
+        </div>
+
+        <!-- Dots -->
+        <div class="carousel-dots" id="carouselDots" aria-label="Slide controls">
+          <button class="carousel-dot active" data-go="0" aria-label="Go to slide 1"></button>
+          <button class="carousel-dot" data-go="1" aria-label="Go to slide 2"></button>
+          <button class="carousel-dot" data-go="2" aria-label="Go to slide 3"></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Desktop: 3-column grid (visible on md+) ===== -->
+    <section class="hidden md:block">
+      <div class="grid grid-cols-3 w-full h-full">
+        <div class="image-container h-[calc(100vh-88px)]">
+          <div class="image-bg bg-cover bg-center w-full h-full" style='background-image: url("siteimages/plantaaltaplaceholder.jpeg");'></div>
+          <div class="overlay">
+            <div class="text">PLANTA ALTA<br>octubre 2022<br><br>Proyecto de rehabitación de la Galeria Larreta con propuestas artísticas, gastronómicas y emprendimientos varios. Precursor del proyecto AFFAIR.</div>
+          </div>
+        </div>
+
+        <div class="image-container h-[calc(100vh-88px)]">
+          <div class="image-bg bg-cover bg-center w-full h-full" style='background-image: url("siteimages/vatesretroplaceholder.jpg");'></div>
+          <div class="overlay">
+            <div class="text">VATES RETRO<br>marzo 2023<br><br>Evento de poesía oral entrelazada con danza, animación y música en tiempo real.</div>
+          </div>
+        </div>
+
+        <div class="image-container h-[calc(100vh-88px)]">
+          <div class="image-bg bg-cover bg-center w-full h-full" style='background-image: url("siteimages/containerplaceholder.png");'></div>
+          <div class="overlay">
+            <div class="text">CONTAINER DE DATA<br>mayo 2020<br><br>Fanzine digital multimedial de participación libre.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
 </div>
 
-</body></html>
+<!-- ===== JS: burger menu + mobile carousel ===== -->
+<script>
+  // Burger toggle
+  (function () {
+    const btn = document.getElementById('burgerBtn');
+    const menu = document.getElementById('mobileMenu');
+    if (!btn || !menu) return;
+
+    btn.addEventListener('click', () => {
+      const open = menu.classList.contains('hidden');
+      menu.classList.toggle('hidden');
+      btn.setAttribute('aria-expanded', String(open));
+      document.body.classList.toggle('no-scroll', open); // optional lock
+    });
+  })();
+
+  // Simple fade carousel (mobile)
+  (function () {
+    const carousel = document.getElementById('carousel');
+    if (!carousel) return;
+
+    const slides = Array.from(carousel.querySelectorAll('.carousel-slide'));
+    const dots = Array.from(document.getElementById('carouselDots').children);
+    let idx = 0;
+    let timer = null;
+    const INTERVAL_MS = 5000;
+
+    function show(i) {
+      slides.forEach((s, j) => s.classList.toggle('active', j === i));
+      dots.forEach((d, j) => d.classList.toggle('active', j === i));
+      idx = i;
+    }
+
+    function next() {
+      show((idx + 1) % slides.length);
+    }
+
+    function start() {
+      stop();
+      timer = setInterval(next, INTERVAL_MS);
+    }
+
+    function stop() {
+      if (timer) clearInterval(timer);
+      timer = null;
+    }
+
+    // Dots control
+    dots.forEach(dot => {
+      dot.addEventListener('click', () => {
+        const go = Number(dot.getAttribute('data-go'));
+        show(go);
+        start();
+      });
+    });
+
+    // Pause on touch (so users can read)
+    let touching = false;
+    carousel.addEventListener('touchstart', () => { touching = true; stop(); }, {passive: true});
+    carousel.addEventListener('touchend', () => { touching = false; start(); }, {passive: true});
+
+    // Optional: swipe left/right
+    let startX = 0;
+    carousel.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; }, {passive: true});
+    carousel.addEventListener('touchend', (e) => {
+      const endX = e.changedTouches[0].clientX;
+      const dx = endX - startX;
+      const threshold = 40; // px
+      if (Math.abs(dx) > threshold) {
+        if (dx < 0) { // swipe left
+          next();
+        } else { // swipe right
+          show((idx - 1 + slides.length) % slides.length);
+        }
+      }
+    }, {passive: true});
+
+    // Start autoplay only when in mobile layout (when desktop grid is hidden)
+    function isMobile() {
+      // md breakpoint is 768px in Tailwind defaults
+      return window.matchMedia('(max-width: 767.98px)').matches;
+    }
+    function handleResize() {
+      if (isMobile()) {
+        start();
+      } else {
+        stop();
+        show(0);
+      }
+    }
+    window.addEventListener('resize', handleResize);
+    handleResize();
+  })();
+</script>
+</body>
+</html>
