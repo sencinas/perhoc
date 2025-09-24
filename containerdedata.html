@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Per Hoc — Container de Data</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Tagesschrift&display=swap" rel="stylesheet"/>
+<link rel="icon" type="image/x-icon" href="siteimages/faviconperhoc.png"/>
+
+<style type="text/tailwindcss">
+  :root { --background-color:#000; --text-color:#fff; --border-color:#333; }
+  body { font-family:'Tagesschrift',sans-serif; background:var(--background-color); color:var(--text-color); overflow:hidden; }
+  header { position:relative; z-index:20; }
+  .bg-scroller { position:fixed; inset:0; z-index:0; display:grid; grid-template-columns:repeat(3,1fr); column-gap:16px; padding:16px; opacity:.85; }
+  .column { display:flex; flex-direction:column; gap:16px; animation:scrollUp 80s linear infinite; }
+  .column:nth-child(2){ animation-duration:80s; }
+  .column:nth-child(3){ animation-duration:80s; }
+  @keyframes scrollUp { 0%{transform:translateY(0%)} 100%{transform:translateY(-50%)} }
+  .column img { width:100%; height:auto; border-radius:10px; object-fit:cover; display:block; filter:brightness(.9); }
+  .stack { display:flex; flex-direction:column; gap:16px; }
+  .center-vignette { position:fixed; inset:0; z-index:10; display:grid; place-items:center; padding:2rem; text-align:center;
+    background: radial-gradient(circle, rgba(0,0,0,.85) 0%, rgba(0,0,0,.4) 65%, rgba(0,0,0,.2) 100%);
+  }
+  .hero-text { max-width:60ch; font-size:clamp(1rem,1.2rem + 1vw,1.5rem); line-height:1.5; }
+  .no-scroll{overflow:hidden;}
+  /* ==== Project navigation arrows ==== */
+.page-arrow {
+  position: fixed;
+  bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;                /* more space between text and arrow */
+  font-size: 1rem;
+  font-weight: 500;
+  color: white;
+  text-decoration: none;
+  z-index: 30;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.page-arrow:hover {
+  opacity: 0.8;
+  transform: translateY(-3px);
+}
+.page-arrow svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+}
+
+/* More padding from sides */
+.page-arrow.right {
+  right: 2rem;   /* was 1rem */
+}
+.page-arrow.left {
+  left: 2rem;    /* was 1rem */
+}
+/* ==== Fade-in for vignette + text ==== */
+@keyframes vignetteIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes textIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Apply fades */
+.center-vignette {
+  opacity: 0;                          /* start hidden */
+  animation: vignetteIn 700ms ease 150ms forwards;
+}
+
+/* Only the text block fades/slides slightly after the vignette */
+.center-vignette .hero-text {
+  opacity: 0;                          /* start hidden */
+  transform: translateY(10px);
+  animation: textIn 600ms ease 350ms forwards;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .center-vignette,
+  .center-vignette .hero-text {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+</style>
+</head>
+<body class="antialiased">
+  <header class="w-full px-8 py-6 border-b border-[var(--border-color)] bg-black/50 backdrop-blur">
+    <div class="flex justify-between items-center">
+      <a class="flex items-center gap-3 text-2xl font-bold tracking-tight" href="index.html">
+        <img alt="Per Hoc Logo" class="h-8 w-8" src="siteimages/file.png"/>
+        <span>Per Hoc</span>
+      </a>
+      <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
+        <a class="hover:text-gray-300 transition-colors" href="https://instagram.com/sencinas_">Instagram</a>
+        <a class="hover:text-gray-300 transition-colors" href="https://www.linkedin.com/in/sencinas/">LinkedIn</a>
+        <a class="hover:text-gray-300 transition-colors" href="mailto:sebastian@perhoc.com">Contacto</a>
+      </nav>
+      <button id="burgerBtn" class="md:hidden inline-flex items-center justify-center p-2 rounded border border-[var(--border-color)] hover:bg-gray-900" aria-label="Open menu" aria-expanded="false">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </div>
+    <nav id="mobileMenu" class="md:hidden hidden mt-4 space-y-3 text-base">
+      <a class="block py-2 px-2 rounded hover:bg-gray-900" href="https://instagram.com/sencinas_">Instagram</a>
+      <a class="block py-2 px-2 rounded hover:bg-gray-900" href="https://www.linkedin.com/in/sencinas/">LinkedIn</a>
+      <a class="block py-2 px-2 rounded hover:bg-gray-900" href="mailto:sebastian@perhoc.com">Contacto</a>
+    </nav>
+  </header>
+
+  <div class="bg-scroller" aria-hidden="true">
+    <div class="column">
+      <div class="stack">
+        <img src="siteimages/containerdata/1.jpg" alt="Container de Data 1"/>
+        <img src="siteimages/containerdata/2.jpg" alt="Container de Data 2"/>
+        <img src="siteimages/containerdata/3.jpg" alt="Container de Data 3"/>
+      </div>
+      <div class="stack">
+        <img src="siteimages/containerdata/1.jpg" alt="Container de Data 1 dup"/>
+        <img src="siteimages/containerdata/2.jpg" alt="Container de Data 2 dup"/>
+        <img src="siteimages/containerdata/3.jpg" alt="Container de Data 3 dup"/>
+      </div>
+    </div>
+
+    <div class="column">
+      <div class="stack">
+        <img src="siteimages/containerdata/4.jpg" alt="Container de Data 4"/>
+        <img src="siteimages/containerdata/5.jpg" alt="Container de Data 5"/>
+        <img src="siteimages/containerdata/6.jpg" alt="Container de Data 6"/>
+      </div>
+      <div class="stack">
+        <img src="siteimages/containerdata/4.jpg" alt="Container de Data 4 dup"/>
+        <img src="siteimages/containerdata/5.jpg" alt="Container de Data 5 dup"/>
+        <img src="siteimages/containerdata/6.jpg" alt="Container de Data 6 dup"/>
+      </div>
+    </div>
+
+    <div class="column">
+      <div class="stack">
+        <img src="siteimages/containerdata/7.jpg" alt="Container de Data 7"/>
+        <img src="siteimages/containerdata/8.jpg" alt="Container de Data 8"/>
+        <img src="siteimages/containerdata/9.jpg" alt="Container de Data 9"/>
+      </div>
+      <div class="stack">
+        <img src="siteimages/containerdata/7.jpg" alt="Container de Data 7 dup"/>
+        <img src="siteimages/containerdata/8.jpg" alt="Container de Data 8 dup"/>
+        <img src="siteimages/containerdata/9.jpg" alt="Container de Data 9 dup"/>
+      </div>
+    </div>
+  </div>
+
+  <main class="center-vignette">
+    <div class="hero-text">
+      <h1 class="text-3xl md:text-4xl font-bold mb-4">CONTAINER DE DATA</h1>
+      <p class="opacity-90">
+        Mayo 2020 · Fanzine digital multimedial de participación libre.
+      </p>
+    </div>
+  </main>
+
+    <a href="vatesretro.html" class="page-arrow left">
+    <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+    </svg>
+    <span>Vates Retro</span>
+    </a>
+
+  <script>
+    (function(){
+      const btn=document.getElementById('burgerBtn');
+      const menu=document.getElementById('mobileMenu');
+      if(!btn||!menu) return;
+      btn.addEventListener('click',()=>{
+        const open=menu.classList.contains('hidden');
+        menu.classList.toggle('hidden');
+        btn.setAttribute('aria-expanded', String(open));
+        document.body.classList.toggle('no-scroll', open);
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -70,6 +70,7 @@
     background-position: center;
     opacity: 0;
     transition: opacity 800ms ease; /* soft fade */
+    cursor: pointer;
   }
   .carousel-slide.active {
     opacity: 1;
@@ -144,7 +145,7 @@
     <section class="block md:hidden">
       <div class="carousel" id="carousel">
         <!-- Slide 1 -->
-        <div class="carousel-slide active" data-index="0" style='background-image: url("siteimages/plantaaltaplaceholder.jpeg");'>
+        <div class="carousel-slide active" data-index="0" data-href="plantaalta.html" style='background-image: url("siteimages/plantaaltaplaceholder.jpeg");'>
           <div class="carousel-overlay">
             <div class="text">
               PLANTA ALTA<br/>octubre 2022<br/><br/>
@@ -153,7 +154,7 @@
           </div>
         </div>
         <!-- Slide 2 -->
-        <div class="carousel-slide" data-index="1" style='background-image: url("siteimages/vatesretroplaceholder.jpg");'>
+        <div class="carousel-slide" data-index="1" data-href="vatesretro.html" style='background-image: url("siteimages/vatesretroplaceholder.jpg");'>
           <div class="carousel-overlay">
             <div class="text">
               VATES RETRO<br/>marzo 2023<br/><br/>
@@ -162,7 +163,7 @@
           </div>
         </div>
         <!-- Slide 3 -->
-        <div class="carousel-slide" data-index="2" style='background-image: url("siteimages/containerplaceholder.png");'>
+        <div class="carousel-slide" data-index="2" data-href="containerdedata.html" style='background-image: url("siteimages/containerplaceholder.png");'>
           <div class="carousel-overlay">
             <div class="text">
               CONTAINER DE DATA<br/>mayo 2020<br/><br/>
@@ -183,25 +184,34 @@
     <!-- ===== Desktop: 3-column grid (visible on md+) ===== -->
     <section class="hidden md:block">
       <div class="grid grid-cols-3 w-full h-full">
-        <div class="image-container h-[calc(100vh-88px)]">
-          <div class="image-bg bg-cover bg-center w-full h-full" style='background-image: url("siteimages/plantaaltaplaceholder.jpeg");'></div>
-          <div class="overlay">
-            <div class="text">PLANTA ALTA<br>octubre 2022<br><br>Proyecto de rehabitación de la Galeria Larreta con propuestas artísticas, gastronómicas y emprendimientos varios. Precursor del proyecto AFFAIR.</div>
+        <a href="plantaalta.html" class="block h-[calc(100vh-88px)]">
+          <div class="image-container h-full">
+            <div class="image-bg bg-cover bg-center w-full h-full" style='background-image: url("siteimages/plantaaltaplaceholder.jpeg");'></div>
+            <div class="overlay">
+              <div class="text">PLANTA ALTA<br>octubre 2022<br><br>Proyecto de rehabitación de la Galeria Larreta con propuestas artísticas, gastronómicas y emprendimientos varios. Precursor del proyecto AFFAIR.</div>
+            </div>
           </div>
-        </div>
+        </a>
 
-        <div class="image-container h-[calc(100vh-88px)]">
-          <div class="image-bg bg-cover bg-center w-full h-full" style='background-image: url("siteimages/vatesretroplaceholder.jpg");'></div>
-          <div class="overlay">
-            <div class="text">VATES RETRO<br>marzo 2023<br><br>Evento de poesía oral entrelazada con danza, animación y música en tiempo real.</div>
+        <!-- Replace the second desktop card with this -->
+        <a href="vatesretro.html" class="block h-[calc(100vh-88px)]">
+          <div class="image-container h-full">
+            <div class="image-bg bg-cover bg-center w-full h-full" style='background-image: url("siteimages/vatesretroplaceholder.jpg");'></div>
+            <div class="overlay">
+              <div class="text">VATES RETRO<br>marzo 2023<br><br>Evento de poesía oral entrelazada con danza, animación y música en tiempo real.</div>
+            </div>
           </div>
-        </div>
+        </a>
 
-        <div class="image-container h-[calc(100vh-88px)]">
-          <div class="image-bg bg-cover bg-center w-full h-full" style='background-image: url("siteimages/containerplaceholder.png");'></div>
-          <div class="overlay">
-            <div class="text">CONTAINER DE DATA<br>mayo 2020<br><br>Fanzine digital multimedial de participación libre.</div>
+        <!-- Replace the third desktop card with this -->
+        <a href="containerdedata.html" class="block h-[calc(100vh-88px)]">
+          <div class="image-container h-full">
+            <div class="image-bg bg-cover bg-center w-full h-full" style='background-image: url("siteimages/containerplaceholder.png");'></div>
+            <div class="overlay">
+              <div class="text">CONTAINER DE DATA<br>mayo 2020<br><br>Fanzine digital multimedial de participación libre.</div>
+            </div>
           </div>
+        </a>
         </div>
       </div>
     </section>
@@ -239,6 +249,16 @@
       slides.forEach((s, j) => s.classList.toggle('active', j === i));
       dots.forEach((d, j) => d.classList.toggle('active', j === i));
       idx = i;
+      // Click to navigate on active slide (ignore when swiping)
+      slides.forEach(slide => {
+        slide.addEventListener('click', (e) => {
+          // if user is currently touching/swiping, don't navigate
+          if (typeof touching !== 'undefined' && touching) return;
+          const target = e.currentTarget;
+          const href = target.getAttribute('data-href');
+          if (href) window.location.href = href;
+        });
+      });
     }
 
     function next() {

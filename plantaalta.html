@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Per Hoc — Planta Alta</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Tagesschrift&display=swap" rel="stylesheet"/>
+<link rel="icon" type="image/x-icon" href="siteimages/faviconperhoc.png"/>
+
+<style type="text/tailwindcss">
+  :root {
+    --background-color: #000000;
+    --text-color: #FFFFFF;
+    --border-color: #333333;
+  }
+  body {
+    font-family: 'Tagesschrift', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    overflow: hidden; /* prevent page scroll; we animate background instead */
+  }
+
+  /* Header */
+  .no-scroll { overflow: hidden; }
+
+  /* Background scroller layout */
+  .bg-scroller {
+    position: fixed; inset: 0; z-index: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columns of images */
+    column-gap: 16px;
+    padding: 16px;
+    opacity: 0.85;
+  }
+  .column {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    /* duplicate content height for seamless loop */
+    animation: scrollUp 80s linear infinite;
+  }
+  /* staggered speeds for parallax feel */
+  .column:nth-child(2) { animation-duration: 80s; }
+  .column:nth-child(3) { animation-duration: 80s; }
+
+  @keyframes scrollUp {
+    0% { transform: translateY(0%); }
+    100% { transform: translateY(-50%); } /* assumes duplicated content = 2x height */
+  }
+
+  .column img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    object-fit: cover;
+    display: block;
+    filter: brightness(0.9);
+  }
+
+  /* Duplicate stack for seamless loop */
+  .stack { display: flex; flex-direction: column; gap: 16px; }
+
+  /* Center text with vignette */
+  .center-vignette {
+    position: fixed; inset: 0; z-index: 10;
+    display: grid; place-items: center;
+    padding: 2rem;
+    text-align: center;
+    background: radial-gradient(
+      circle,
+      rgba(0,0,0,0.85) 0%,
+      rgba(0,0,0,0.4) 65%,
+      rgba(0,0,0,0.2) 100%
+    );
+  }
+  .hero-text {
+    max-width: 60ch;
+    font-size: clamp(1rem, 1.2rem + 1vw, 1.5rem);
+    line-height: 1.5;
+  }
+
+  /* Header styling to sit above background */
+  header { position: relative; z-index: 20; }
+
+  /* ==== Project navigation arrows ==== */
+.page-arrow {
+  position: fixed;
+  bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;                /* more space between text and arrow */
+  font-size: 1rem;
+  font-weight: 500;
+  color: white;
+  text-decoration: none;
+  z-index: 30;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.page-arrow:hover {
+  opacity: 0.8;
+  transform: translateY(-3px);
+}
+.page-arrow svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+}
+
+/* More padding from sides */
+.page-arrow.right {
+  right: 2rem;   /* was 1rem */
+}
+.page-arrow.left {
+  left: 2rem;    /* was 1rem */
+}
+/* ==== Fade-in for vignette + text ==== */
+@keyframes vignetteIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes textIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Apply fades */
+.center-vignette {
+  opacity: 0;                          /* start hidden */
+  animation: vignetteIn 700ms ease 150ms forwards;
+}
+
+/* Only the text block fades/slides slightly after the vignette */
+.center-vignette .hero-text {
+  opacity: 0;                          /* start hidden */
+  transform: translateY(10px);
+  animation: textIn 600ms ease 350ms forwards;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .center-vignette,
+  .center-vignette .hero-text {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+</style>
+</head>
+<body class="antialiased">
+  <!-- Header (same as index) -->
+  <header class="w-full px-8 py-6 border-b border-[var(--border-color)] bg-black/50 backdrop-blur">
+    <div class="flex justify-between items-center">
+      <a class="flex items-center gap-3 text-2xl font-bold tracking-tight" href="index.html">
+        <img alt="Per Hoc Logo" class="h-8 w-8" src="siteimages/file.png"/>
+        <span>Per Hoc</span>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
+        <a class="hover:text-gray-300 transition-colors" href="https://instagram.com/sencinas_">Instagram</a>
+        <a class="hover:text-gray-300 transition-colors" href="https://www.linkedin.com/in/sencinas/">LinkedIn</a>
+        <a class="hover:text-gray-300 transition-colors" href="mailto:sebastian@perhoc.com">Contacto</a>
+      </nav>
+
+      <button id="burgerBtn" class="md:hidden inline-flex items-center justify-center p-2 rounded border border-[var(--border-color)] hover:bg-gray-900 focus:outline-none" aria-label="Open menu" aria-expanded="false">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round">
+          <path d="M3 6h18M3 12h18M3 18h18"/>
+        </svg>
+      </button>
+    </div>
+
+    <nav id="mobileMenu" class="md:hidden hidden mt-4 space-y-3 text-base">
+      <a class="block py-2 px-2 rounded hover:bg-gray-900" href="https://instagram.com/sencinas_">Instagram</a>
+      <a class="block py-2 px-2 rounded hover:bg-gray-900" href="https://www.linkedin.com/in/sencinas/">LinkedIn</a>
+      <a class="block py-2 px-2 rounded hover:bg-gray-900" href="mailto:sebastian@perhoc.com">Contacto</a>
+    </nav>
+  </header>
+
+  <!-- Background columns that scroll upward -->
+  <div class="bg-scroller" aria-hidden="true">
+    <!-- Column 1 -->
+    <div class="column">
+      <div class="stack">
+        <img src="siteimages/plantaalta/1.jpg" alt="Planta Alta 1"/>
+        <img src="siteimages/plantaalta/2.jpg" alt="Planta Alta 2"/>
+        <img src="siteimages/plantaalta/3.jpg" alt="Planta Alta 3"/>
+        <img src="siteimages/plantaalta/4.jpg" alt="Planta Alta 4"/>
+        <img src="siteimages/plantaalta/5.jpg" alt="Planta Alta 5"/>
+      </div>
+      <!-- duplicate for seamless loop -->
+      <div class="stack">
+        <img src="siteimages/plantaalta/1.jpg" alt="Planta Alta 1 dup"/>
+        <img src="siteimages/plantaalta/2.jpg" alt="Planta Alta 2 dup"/>
+        <img src="siteimages/plantaalta/3.jpg" alt="Planta Alta 3 dup"/>
+        <img src="siteimages/plantaalta/4.jpg" alt="Planta Alta 4 dup"/>
+        <img src="siteimages/plantaalta/5.jpg" alt="Planta Alta 5 dup"/>
+      </div>
+    </div>
+
+    <!-- Column 2 -->
+    <div class="column">
+      <div class="stack">
+        <img src="siteimages/plantaalta/6.jpg" alt="Planta Alta 6"/>
+        <img src="siteimages/plantaalta/7.jpg" alt="Planta Alta 7"/>
+        <img src="siteimages/plantaalta/8.jpg" alt="Planta Alta 8"/>
+        <img src="siteimages/plantaalta/9.jpg" alt="Planta Alta 9"/>
+      </div>
+      <div class="stack">
+        <img src="siteimages/plantaalta/6.jpg" alt="Planta Alta 6 dup"/>
+        <img src="siteimages/plantaalta/7.jpg" alt="Planta Alta 7 dup"/>
+        <img src="siteimages/plantaalta/8.jpg" alt="Planta Alta 8 dup"/>
+        <img src="siteimages/plantaalta/9.jpg" alt="Planta Alta 9 dup"/>
+      </div>
+    </div>
+
+    <!-- Column 3 -->
+    <div class="column">
+      <div class="stack">
+        <img src="siteimages/plantaalta/10.jpg" alt="Planta Alta 10"/>
+        <img src="siteimages/plantaalta/11.jpg" alt="Planta Alta 11"/>
+        <img src="siteimages/plantaalta/12.jpg" alt="Planta Alta 12"/>
+      </div>
+      <div class="stack">
+        <img src="siteimages/plantaalta/10.jpg" alt="Planta Alta 10 dup"/>
+        <img src="siteimages/plantaalta/11.jpg" alt="Planta Alta 11 dup"/>
+        <img src="siteimages/plantaalta/12.jpg" alt="Planta Alta 12 dup"/>
+      </div>
+    </div>
+  </div>
+
+  <!-- Center text with vignette -->
+  <main class="center-vignette">
+    <div class="hero-text">
+      <h1 class="text-3xl md:text-4xl font-bold mb-4">PLANTA ALTA</h1>
+      <p class="opacity-90">
+        Octubre 2022 · Proyecto de rehabitación de la Galería Larreta con propuestas artísticas, gastronómicas y emprendimientos varios.
+        Precursor del proyecto AFFAIR.
+      </p>
+    </div>
+  </main>
+
+    <a href="vatesretro.html" class="page-arrow right">
+    <span>Vates Retro</span>
+    <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+    </svg>
+    </a>
+
+  <script>
+    // Burger toggle
+    (function () {
+      const btn = document.getElementById('burgerBtn');
+      const menu = document.getElementById('mobileMenu');
+      if (!btn || !menu) return;
+      btn.addEventListener('click', () => {
+        const open = menu.classList.contains('hidden');
+        menu.classList.toggle('hidden');
+        btn.setAttribute('aria-expanded', String(open));
+        document.body.classList.toggle('no-scroll', open);
+      });
+    })();
+  </script>
+</body>
+</html>
